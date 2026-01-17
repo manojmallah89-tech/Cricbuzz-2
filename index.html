@@ -3,7 +3,7 @@
 <head>  
   <meta charset="UTF-8">  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-  <title>Prime By Cricket Yoddha</title>     
+  <title>Prime By Cricket Yoddha - Live</title>     
   <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous">  
   <style>  
@@ -27,19 +27,13 @@
       background: #000;  
       object-fit: contain;  
     }  
-    /* Shaka Spinner Hiding */
-    .shaka-spinner-container,  
-    .shaka-spinner,  
-    .shaka-spinner-svg {  
-      display: none !important;  
-      visibility: hidden !important;  
-      opacity: 0 !important;  
-    }  
+    /* Spinner Hidden as per your design */
+    .shaka-spinner-container { display: none !important; }  
   </style>  
 </head>  
 <body>  
   <div class="shaka-video-container" data-shaka-player>  
-    <video autoplay playsinline preload="metadata"></video>  
+    <video autoplay playsinline id="video"></video>  
   </div>  
   
   <script>  
@@ -51,23 +45,17 @@
         return;  
       }  
   
-      const video = document.querySelector('video');  
+      const video = document.getElementById('video');  
+      const container = document.querySelector('.shaka-video-container');  
       const player = new shaka.Player();  
       await player.attach(video);  
   
-      const container = document.querySelector('.shaka-video-container');  
       const ui = new shaka.ui.Overlay(player, container, video);  
   
       ui.configure({  
         controlPanelElements: [  
-          'play_pause', 'time_and_duration', 'mute', 'volume',  
-          'spacer', 'language', 'captions', 'picture_in_picture',  
-          'quality', 'fullscreen'  
+          'play_pause', 'time_and_duration', 'spacer', 'quality', 'fullscreen'  
         ],  
-        volumeBarColors: {  
-          base: 'rgba(255, 192, 203, 0.3)',  
-          level: 'rgb(255, 105, 180)'
-        },  
         seekBarColors: {  
           base: 'rgba(255, 255, 0, 0.3)',  
           buffered: 'rgba(255, 255, 0, 0.6)',  
@@ -75,43 +63,29 @@
         }  
       });  
   
-      // ✅ NEW DRM Key (ID:Key)
-      let drmConfig = {  
+      // ✅ अपडेटेड DRM कॉन्फ़िगरेशन
+      const drmConfig = {  
         clearKeys: {  
           "4e8b5ddac5332a4e66c002b4c0f22322": "d06de29b0eacb81ac6e3f325849047e8"  
         }  
       };  
   
-      // ✅ NEW MPD URL
-      let streamUrl = "https://ev-fast-mpd.starzplayarabia.com/live/eds/Criclife_3/DASH/Criclife_3.mpd";  
+      // ✅ अपडेटेड स्ट्रीम URL
+      const streamUrl = "https://ev-fast-mpd.starzplayarabia.com/live/eds/Criclife_3/DASH/Criclife_3.mpd";  
   
       player.configure({  
         drm: drmConfig,  
         streaming: {  
           lowLatencyMode: true,  
-          bufferingGoal: 10,  
-          rebufferingGoal: 2,  
-          bufferBehind: 10,  
-          retryParameters: {  
-            timeout: 10000,  
-            maxAttempts: 5,  
-            baseDelay: 300,  
-            backoffFactor: 1.2  
-          },  
-          segmentRequestTimeout: 8000,  
-          useNativeHlsOnSafari: true  
+          jumpLargeGaps: true // लाइव स्ट्रीम में गैप्स को रोकने के लिए
         }  
-      });  
-  
-      player.addEventListener('error', (event) => {  
-        console.error('Shaka Player Error:', event.detail);  
       });  
   
       try {  
         await player.load(streamUrl);  
-        console.log("Criclife 3 Stream loaded successfully");  
+        console.log("Stream successfully loaded!");  
       } catch (error) {  
-        console.error('Load error:', error);  
+        console.error('Error loading stream:', error);  
       }  
     });  
   </script>  
