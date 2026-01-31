@@ -27,13 +27,12 @@
       background: #000;  
       object-fit: contain;  
     }  
-    /* Spinner Hidden as per your design */
     .shaka-spinner-container { display: none !important; }  
   </style>  
 </head>  
 <body>  
   <div class="shaka-video-container" data-shaka-player>  
-    <video autoplay playsinline id="video"></video>  
+    <video autoplay muted playsinline id="video"></video>  
   </div>  
   
   <script>  
@@ -63,27 +62,28 @@
         }  
       });  
   
-      // ✅ अपडेटेड DRM कॉन्फ़िगरेशन
+      // ✅ Nayi ClearKey Details
       const drmConfig = {  
         clearKeys: {  
           "4e8b5ddac5332a4e66c002b4c0f22322": "d06de29b0eacb81ac6e3f325849047e8"  
         }  
       };  
   
-      // ✅ अपडेटेड स्ट्रीम URL
+      // ✅ Naya Stream URL
       const streamUrl = "https://ev-fast-mpd.starzplayarabia.com/live/eds/Criclife_3/DASH/Criclife_3.mpd";  
   
       player.configure({  
         drm: drmConfig,  
         streaming: {  
           lowLatencyMode: true,  
-          jumpLargeGaps: true // लाइव स्ट्रीम में गैप्स को रोकने के लिए
+          jumpLargeGaps: true,
+          rebufferingGoal: 2
         }  
       });  
   
       try {  
         await player.load(streamUrl);  
-        console.log("Stream successfully loaded!");  
+        console.log("Criclife 3 stream successfully loaded!");  
       } catch (error) {  
         console.error('Error loading stream:', error);  
       }  
